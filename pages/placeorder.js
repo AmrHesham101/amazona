@@ -37,15 +37,21 @@ function PlaceOrderScreen() {
   const placeOrderHandler = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.post("/api/orders", {
-        orderItems: cartItems,
-        shippingAddress,
-        paymentMethod,
-        itemsPrice,
-        shippingPrice,
-        taxPrice,
-        totalPrice,
-      });
+      const { data } = await axios.post(
+        "/api/orders",
+        {
+          orderItems: cartItems,
+          shippingAddress,
+          paymentMethod,
+          itemsPrice,
+          shippingPrice,
+          taxPrice,
+          totalPrice,
+        },
+        {
+          withCredentials: true,
+        }
+      );
       setLoading(false);
       dispatch({ type: "CART_CLEAR_ITEMS" });
       Cookies.set(

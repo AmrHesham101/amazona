@@ -25,7 +25,9 @@ function OrderHistoryScreen() {
     const fetchOrders = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get("/api/orders/history");
+        const { data } = await axios.get("/api/orders/history", {
+          withCredentials: true,
+        });
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
