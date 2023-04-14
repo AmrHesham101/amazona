@@ -19,7 +19,7 @@ a {
 }
 
 .card {
-  @apply mb-5  block   rounded-lg border border-gray-200  shadow-md;
+  @apply mb-5  block   rounded-lg border border-gray-200  shadow-md  dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700;
 }
 
 .primary-button {
@@ -32,15 +32,15 @@ a {
 input,
 select,
 textarea {
-  @apply rounded border p-2  outline-none ring-indigo-300  focus:ring;
+  @apply rounded border p-2  outline-none ring-indigo-300  focus:ring dark:bg-gray-600;
 }
 
 .dropdown-link {
-  @apply flex p-2 hover:bg-gray-200;
+  @apply flex p-2 hover:bg-gray-200 dark:hover:bg-gray-900;
 }
 
 .alert-error {
-  @apply my-3 rounded-lg bg-red-100 p-3 text-red-700;
+  @apply my-3 rounded-lg bg-red-100 p-3 text-red-700 ;
 }
 
 .alert-success {

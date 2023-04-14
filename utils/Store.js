@@ -6,9 +6,14 @@ const initialState = {
   cart: Cookies.get("cart")
     ? JSON.parse(Cookies.get("cart"))
     : { cartItems: [], shippingAddress: { location: {} }, paymentMethod: "" },
+  darkMode: Cookies.get("darkMode") === "ON",
 };
 function reducer(state, action) {
   switch (action.type) {
+    case "DARK_MODE_ON":
+      return { ...state, darkMode: true };
+    case "DARK_MODE_OFF":
+      return { ...state, darkMode: false };
     case "CART_ADD_ITEM": {
       const newItem = action.payload;
       const existItem = state.cart.cartItems.find(
@@ -52,6 +57,17 @@ function reducer(state, action) {
         },
       };
     }
+    case "SAVE_SHIPPING_ADDRESS_MAP_LOCATION":
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          shippingAddress: {
+            ...state.cart.shippingAddress,
+            location: action.payload,
+          },
+        },
+      };
     case "SAVE_PAYMENT_METHOD":
       return {
         ...state,

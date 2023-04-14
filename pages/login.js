@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import Link from "next/link";
-import  { signIn, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { getError } from "@/utils/error";
@@ -82,7 +82,7 @@ export default function LoginScreen() {
         </div>
         <div className="mb-4">
           Don&apos;t have an account?&nbsp;
-          <Link href="/register">Register</Link>
+          <Link href={`/register?redirect=${redirect || "/"}`}>Register</Link>
         </div>
       </form>
     </Layout>
