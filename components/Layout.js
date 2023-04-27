@@ -11,20 +11,22 @@ import Cookies from "js-cookie";
 import {
   DotsVerticalIcon,
   MenuIcon,
-  MoonIcon,
   SearchIcon,
-  SunIcon,
   XCircleIcon,
 } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { getError } from "@/utils/error";
+import dynamic from "next/dynamic";
+const SunIcon = dynamic(() => import("./icons/SunIcon"), { ssr: false });
+const MoonIcon = dynamic(() => import("./icons/MoonIcon"), { ssr: false });
 
 export default function Layout({ children, title }) {
   const { status, data: session } = useSession();
   const logoutRef = useRef(null);
   const orderHistoryRef = useRef(null);
   const profileRef = useRef(null);
+  const adminRef = useRef(null);
   const { state, dispatch } = useContext(Store);
   const { cart, darkMode } = state;
   const [isOpen, setIsOpen] = useState(false);
@@ -142,6 +144,17 @@ export default function Layout({ children, title }) {
                   Order History
                 </DropdownLink>
               </Menu.Item>
+              {session.user.isAdmin && (
+                <Menu.Item>
+                  <DropdownLink
+                    ref={adminRef}
+                    className="dropdown-link"
+                    href="/admin/dashboard"
+                  >
+                    Admin Dashbored
+                  </DropdownLink>
+                </Menu.Item>
+              )}
               <Menu.Item>
                 <DropdownLink
                   className="dropdown-link"
@@ -171,7 +184,7 @@ export default function Layout({ children, title }) {
           </Link>
         </div>
         <div>
-          <button className="py-2 pr-2">
+          <button type="button" className="py-2 pr-2">
             {darkMode ? (
               <SunIcon
                 onClick={darkModeChangeHandler}

@@ -45,7 +45,7 @@ export async function getServerSideProps() {
   await db.disconnect();
   return {
     props: {
-      products: products.map(db.converDocToObj),
+      products: products.map(db.convertDocToObj),
     },
   };
 }

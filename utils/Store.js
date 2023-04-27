@@ -1,12 +1,16 @@
 import { createContext, useReducer } from "react";
 import Cookies from "js-cookie";
 export const Store = createContext();
+const isDarkModeCookieSet = Cookies.get("darkMode");
+const initialDarkMode = isDarkModeCookieSet
+  ? isDarkModeCookieSet === "ON"
+  : false;
 
 const initialState = {
   cart: Cookies.get("cart")
     ? JSON.parse(Cookies.get("cart"))
     : { cartItems: [], shippingAddress: { location: {} }, paymentMethod: "" },
-  darkMode: Cookies.get("darkMode") === "ON",
+  darkMode: initialDarkMode,
 };
 function reducer(state, action) {
   switch (action.type) {

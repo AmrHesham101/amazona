@@ -1,39 +1,59 @@
 import mongoose from "mongoose";
+
 const connection = {};
+
 async function connect() {
   if (connection.isConnected) {
-    console.log("already connected");
+    console.log("Already connected to MongoDB");
     return;
   }
-  if (mongoose.connections.length > 0) {
-    connection.isConnected = mongoose.connections[0].readyState;
-    if (connection.isConnected === 1) {
-      console.log("use previous connection");
-      return;
-    }
-    await mongoose.disconnect();
+
+  try {
+    const db = await mongoose.connect(process.env.MONGODB_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("Connected to MongoDB");
+    connection.isConnected = db.connections[0].readyState;
+  } catch (error) {
+    console.error("Error connecting to MongoDB", error);
   }
-  const db = await mongoose.connect(process.env.MONGODB_URL);
-  console.log("new connection");
-  connection.isConnected = db.connections[0].readyState;
 }
 
 async function disconnect() {
-  if (connection.isConnected) {
+  if (!connection.isConnected) {
+    console.log("Not connected to MongoDB");
+    return;
+  }
+
+  try {
     if (process.env.NODE_ENV === "production") {
       await mongoose.disconnect();
       connection.isConnected = false;
+      console.log("Disconnected from MongoDB");
     } else {
-      console.log("not disconnected");
+      console.log("Not disconnected from MongoDB (development mode)");
     }
+  } catch (error) {
+    console.error("Error disconnecting from MongoDB", error);
   }
 }
-function converDocToObj(doc) {
-  doc._id = doc._id.toString();
-  doc.createdAt = doc.createdAt.toString();
-  doc.updatedAt = doc.updatedAt.toString();
-  return doc;
+
+function convertDocToObj(doc) {
+  let convertedDoc = doc;
+  if (doc instanceof mongoose.Document) {
+    convertedDoc = doc.toObject();
+  }
+  convertedDoc._id = convertedDoc._id.toString();
+  convertedDoc.createdAt = convertedDoc.createdAt.toString();
+  convertedDoc.updatedAt = convertedDoc.updatedAt.toString();
+  return convertedDoc;
 }
-const db = { connect, disconnect, converDocToObj };
+
+const db = {
+  connect,
+  disconnect,
+  convertDocToObj,
+};
 
 export default db;
