@@ -28,6 +28,7 @@ export default function ProductScreen(props) {
       if (!product) {
         return;
       }
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       const { data } = await axios.get(`/api/products/${product._id}/reviews`);
       setReviews(data);
     } catch (err) {
