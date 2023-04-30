@@ -23,6 +23,17 @@ export default function ProductScreen(props) {
 
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
+  const fetchReviews = useCallback(async () => {
+    try {
+      if (!product) {
+        return;
+      }
+      const { data } = await axios.get(`/api/products/${product._id}/reviews`);
+      setReviews(data);
+    } catch (err) {
+      toast.error(getError(err));
+    }
+  }, [product]);
 
   const submitHandler = async ({ rating, comment }) => {
     setLoading(true);
@@ -39,18 +50,6 @@ export default function ProductScreen(props) {
       toast.error(getError(err));
     }
   };
-
-  const fetchReviews = useCallback(async () => {
-    try {
-      if (!product) {
-        return;
-      }
-      const { data } = await axios.get(`/api/products/${product._id}/reviews`);
-      setReviews(data);
-    } catch (err) {
-      toast.error(getError(err));
-    }
-  }, [product]);
 
   useEffect(() => {
     fetchReviews();
