@@ -41,11 +41,6 @@ To run the application locally, follow these steps:
 
 Visit [http://localhost:3000](http://localhost:3000) to access the application. You can sign up for a new account, browse products, add items to your cart, and proceed to checkout using the PayPal payment option.
 
-To access the admin dashboard, use the following credentials:
-
-- Username: admin@example.com
-- Password: 123456
-
 From the dashboard, you can manage products and orders.
 
 ## License
