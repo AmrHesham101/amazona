@@ -7,6 +7,7 @@ import { getSession } from "next-auth/react";
 const getHandler = async (req, res) => {
   db.connect();
   const product = await Product.findById(req.query.id);
+  console.log(product.reviews)
   db.disconnect();
   if (product) {
     res.send(product.reviews);
@@ -42,7 +43,7 @@ const postHandler = async (req, res, user) => {
       return res.send({ message: "Review updated" });
     } else {
       const review = {
-        user: mongoose.Types.ObjectId(user._id),
+        user: new mongoose.Types.ObjectId(user._id),
         name: user.name,
         rating: Number(req.body.rating),
         comment: req.body.comment,
