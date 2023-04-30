@@ -224,7 +224,7 @@ export default function Layout({ children, title }) {
                 <MenuIcon className="h-5 w-5 text-blue-500"></MenuIcon>
               </div>
               <Link
-                className="text-lg font-bold text-black dark:text-white"
+                className="text-lg font-bold "
                 href="/"
               >
                 amazona

@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout";
 import { getError } from "@/utils/error";
 import axios from "axios";
+import { getSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useReducer } from "react";
 function reducer(state, action) {
@@ -39,7 +40,15 @@ function OrderHistoryScreen() {
     <Layout title="Order History">
       <h1 className="mb-4 text-xl">Order History</h1>
       {loading ? (
-        <div>loadding...</div>
+        <div className="flex justify-center overflow-hidden">
+          <div
+            className="animate-spin inline-block w-12 h-12 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+            role="status"
+            aria-label="loading"
+          >
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
       ) : error ? (
         <div className="alert-error">{error}</div>
       ) : (
@@ -86,3 +95,17 @@ function OrderHistoryScreen() {
 
 OrderHistoryScreen.auth = true;
 export default OrderHistoryScreen;
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/unauthorized?message=login required",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}

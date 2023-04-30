@@ -2,6 +2,7 @@ import CheckoutWizard from "@/components/CheckoutWizard";
 import Layout from "@/components/Layout";
 import { Store } from "@/utils/Store";
 import Cookies from "js-cookie";
+import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -71,3 +72,17 @@ function PaymentScreen() {
 
 PaymentScreen.auth = true;
 export default PaymentScreen;
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/unauthorized?message=login required",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}

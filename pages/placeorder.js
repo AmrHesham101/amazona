@@ -4,6 +4,7 @@ import { getError } from "@/utils/error";
 import { Store } from "@/utils/Store";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { getSession } from "next-auth/react";
 import Image from "next/legacy/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -188,3 +189,17 @@ function PlaceOrderScreen() {
 
 PlaceOrderScreen.auth = true;
 export default PlaceOrderScreen;
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/unauthorized?message=login required",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}

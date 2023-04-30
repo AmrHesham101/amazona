@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Layout from "@/components/Layout";
 import { getError } from "@/utils/error";
+import { getSession } from "next-auth/react";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -152,7 +153,15 @@ export default function AdminProductEditScreen() {
         </div>
         <div className="md:col-span-3">
           {loading ? (
-            <div>Loading...</div>
+            <div className="flex justify-center">
+              <div
+                className="animate-spin inline-block w-12 h-12 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+                role="status"
+                aria-label="loading"
+              >
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>
           ) : error ? (
             <div className="alert-error">{error}</div>
           ) : (
@@ -226,7 +235,19 @@ export default function AdminProductEditScreen() {
                   id="imageFile"
                   onChange={uploadHandler}
                 />
-                {loadingUpload && <div>Uploading....</div>}
+                {loadingUpload && (
+                  <div className="flex">
+                    <div
+                      role="status"
+                      aria-label="loading"
+                      aria-hidden="true"
+                      className="animate-spin inline-block border-[3px] border-current border-t-transparent rounded-full w-5 h-5 mr-2 text-blue-600 "
+                    >
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                    Preparing your file
+                  </div>
+                )}
               </div>
               <div className="mb-4">
                 <label htmlFor="category">category</label>
@@ -305,3 +326,17 @@ export default function AdminProductEditScreen() {
 }
 
 AdminProductEditScreen.auth = { adminOnly: true };
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session || (session && !session.user.isAdmin)) {
+    return {
+      redirect: {
+        destination: "/unauthorized?message=admin login required",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}

@@ -6,6 +6,7 @@ import Layout from "@/components/Layout";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import { getSession } from "next-auth/react";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -106,7 +107,15 @@ function AdminUserEdit() {
         </div>
         <div className="md:col-span-3">
           {loading ? (
-            <div>Loading...</div>
+            <div className="flex justify-center overflow-hidden">
+              <div
+                class="animate-spin inline-block w-12 h-12 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+                role="status"
+                aria-label="loading"
+              >
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
           ) : error ? (
             <div className="alert-error">{error}</div>
           ) : (
@@ -161,3 +170,17 @@ function AdminUserEdit() {
 
 AdminUserEdit.auth = { adminOnly: true };
 export default AdminUserEdit;
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session || (session && !session.user.isAdmin)) {
+    return {
+      redirect: {
+        destination: "/unauthorized?message=admin login required",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}

@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout";
 import { getError } from "@/utils/error";
 import axios from "axios";
+import { getSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useReducer } from "react";
 
@@ -62,7 +63,15 @@ export default function AdminOrderScreen() {
         <div className="overflow-x-auto md:col-span-3">
           <h1 className="mb-4 text-xl">Admin Orders</h1>
           {loading ? (
-            <div>loading</div>
+            <div className="flex justify-center  overflow-hidden">
+              <div
+                className="animate-spin inline-block w-12 h-12 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+                role="status"
+                aria-label="loading"
+              >
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>
           ) : error ? (
             <div className="alert-error">{error}</div>
           ) : (
@@ -117,3 +126,17 @@ export default function AdminOrderScreen() {
 }
 
 AdminOrderScreen.auth = { adminOnly: true };
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session || (session && !session.user.isAdmin)) {
+    return {
+      redirect: {
+        destination: "/unauthorized?message=admin login required",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}

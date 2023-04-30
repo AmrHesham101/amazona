@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout";
 import { getError } from "@/utils/error";
 import axios from "axios";
-import { signIn, useSession } from "next-auth/react";
+import { getSession, signIn, useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -138,3 +138,17 @@ export default function ProfileScreen() {
 }
 
 ProfileScreen.auth = true;
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/unauthorized?message=login required",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}

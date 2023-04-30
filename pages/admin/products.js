@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout";
 import { getError } from "@/utils/error";
 import axios from "axios";
+import { getSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useReducer } from "react";
@@ -127,7 +128,15 @@ export default function AdminProductsScreen() {
             </button>
           </div>
           {loading ? (
-            <div>loading</div>
+            <div className="flex justify-center overflow-hidden">
+              <div
+                className="animate-spin inline-block w-12 h-12 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+                role="status"
+                aria-label="loading"
+              >
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>
           ) : error ? (
             <div className="alert-error">{error}</div>
           ) : (
@@ -185,3 +194,17 @@ export default function AdminProductsScreen() {
 }
 
 AdminProductsScreen.auth = { adminOnly: true };
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session || (session && !session.user.isAdmin)) {
+    return {
+      redirect: {
+        destination: "/unauthorized?message=admin login required",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}

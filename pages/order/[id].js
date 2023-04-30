@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import { getError } from "@/utils/error";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import axios from "axios";
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import Image from "next/legacy/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -168,7 +168,15 @@ function OrderScreen() {
     <Layout title={`Order ${orderId}`}>
       <h1 className="mb-4 text-xl">{`Order ${orderId}`}</h1>
       {loading ? (
-        <div>Looading ...</div>
+        <div className="flex justify-center overflow-hidden">
+          <div
+            className="animate-spin inline-block w-12 h-12 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+            role="status"
+            aria-label="loading"
+          >
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
       ) : error ? (
         <div className="alert-error">{error}</div>
       ) : (
@@ -267,7 +275,15 @@ function OrderScreen() {
                 {!isPaid && (
                   <li>
                     {isPending ? (
-                      <div>loading</div>
+                      <div className="flex justify-center overflow-hidden">
+                        <div
+                          className="animate-spin inline-block w-12 h-12 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+                          role="status"
+                          aria-label="loading"
+                        >
+                          <span className="sr-only">Loading...</span>
+                        </div>
+                      </div>
                     ) : (
                       <div className="w-full">
                         <PayPalButtons
@@ -277,13 +293,35 @@ function OrderScreen() {
                         ></PayPalButtons>
                       </div>
                     )}
-                    {loadingPay && <div>Loading...</div>}
+                    {loadingPay && (
+                      <div className="flex justify-center">
+                        <div
+                          role="status"
+                          aria-label="loading"
+                          aria-hidden="true"
+                          className="animate-spin inline-block border-[3px] border-current border-t-transparent rounded-full w-5 h-5 mr-2 text-blue-600 "
+                        >
+                          <span className="sr-only">Loading...</span>
+                        </div>
+                        Preparing your Transation
+                      </div>
+                    )}
                   </li>
                 )}
                 {session.user.isAdmin && order.isPaid && !order.isDelivered && (
                   <li>
                     {loadindDeliver ? (
-                      <div>loading</div>
+                      <div className="flex justify-center">
+                        <div
+                          role="status"
+                          aria-label="loading"
+                          aria-hidden="true"
+                          className="animate-spin inline-block border-[3px] border-current border-t-transparent rounded-full w-5 h-5 mr-2 text-blue-600 "
+                        >
+                          <span className="sr-only">Loading...</span>
+                        </div>
+                        Delivering
+                      </div>
                     ) : (
                       <button
                         className="primary-button w-full"
@@ -305,3 +343,17 @@ function OrderScreen() {
 
 OrderScreen.auth = true;
 export default OrderScreen;
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/unauthorized?message=login required",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}

@@ -4,6 +4,7 @@ import React, { useEffect, useReducer } from "react";
 import { toast } from "react-toastify";
 import Layout from "@/components/Layout";
 import { getError } from "@/utils/error";
+import { getSession } from "next-auth/react";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -92,7 +93,15 @@ function AdminUsersScreen() {
           <h1 className="mb-4 text-xl">Users</h1>
           {loadingDelete && <div>Deleting...</div>}
           {loading ? (
-            <div>Loading...</div>
+            <div className="flex justify-center overflow-hidden">
+              <div
+                className="animate-spin inline-block w-12 h-12 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+                role="status"
+                aria-label="loading"
+              >
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>
           ) : error ? (
             <div className="alert-error">{error}</div>
           ) : (
@@ -145,3 +154,17 @@ function AdminUsersScreen() {
 
 AdminUsersScreen.auth = { adminOnly: true };
 export default AdminUsersScreen;
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session || (session && !session.user.isAdmin)) {
+    return {
+      redirect: {
+        destination: "/unauthorized?message=admin login required",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}

@@ -13,6 +13,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { getSession } from "next-auth/react";
 
 ChartJS.register(
   CategoryScale,
@@ -97,7 +98,15 @@ function AdminDashboardScreen() {
         <div className="md:col-span-3">
           <h1 className="mb-4 text-xl">Admin Dashboared</h1>
           {loading ? (
-            <div>loading</div>
+            <div className="flex justify-center overflow-hidden">
+              <div
+                className="animate-spin inline-block w-12 h-12 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+                role="status"
+                aria-label="loading"
+              >
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>
           ) : error ? (
             <div className="alert-error">{error}</div>
           ) : (
@@ -141,3 +150,17 @@ function AdminDashboardScreen() {
 
 AdminDashboardScreen.auth = { adminOnly: true };
 export default AdminDashboardScreen;
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session || (session && !session.user.isAdmin)) {
+    return {
+      redirect: {
+        destination: "/unauthorized?message=admin login required",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}

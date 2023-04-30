@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import Link from "next/link";
-import { signIn, useSession } from "next-auth/react";
+import { getSession, signIn, useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { getError } from "@/utils/error";
@@ -87,4 +87,18 @@ export default function LoginScreen() {
       </form>
     </Layout>
   );
+}
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (session) {
+    return {
+      redirect: {
+        destination: context.query.redirect || "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 }
