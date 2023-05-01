@@ -122,7 +122,7 @@ export default function Layout({ children, title }) {
           "Loading"
         ) : session?.user ? (
           <Menu as="div" className="relative inline-block ">
-            <Menu.Button className="text-blue-600">
+            <Menu.Button className="text-blue-600 dark:text-primary">
               {session.user.name}
             </Menu.Button>
             <Menu.Items className="absolute  md:right-0   w-56 origin-top-right   bg-white shadow-lg   dark:bg-black dark:shadow-gray-700">
@@ -188,12 +188,12 @@ export default function Layout({ children, title }) {
             {darkMode ? (
               <SunIcon
                 onClick={darkModeChangeHandler}
-                className="h-5 w-5 text-blue-500  "
+                className="h-5 w-5 text-blue-500 dark:text-primary "
               />
             ) : (
               <MoonIcon
                 onClick={darkModeChangeHandler}
-                className="h-5 w-5 text-blue-500  "
+                className="h-5 w-5 text-blue-500 dark:text-primary "
               />
             )}
           </button>
@@ -221,7 +221,7 @@ export default function Layout({ children, title }) {
                 className="cursor-pointer px-4  "
                 onClick={() => setShowSidebar(!showSidebar)}
               >
-                <MenuIcon className="h-5 w-5 text-blue-500"></MenuIcon>
+                <MenuIcon className="h-5 w-5 text-blue-500 dark:text-primary"></MenuIcon>
               </div>
               <Link
                 className="text-lg font-bold "
@@ -249,7 +249,7 @@ export default function Layout({ children, title }) {
               </button>
             </form>
             <div className="cursor-pointer px-4 md:hidden" onClick={toggle}>
-              <DotsVerticalIcon className="h-5 w-5 text-blue-500"></DotsVerticalIcon>
+              <DotsVerticalIcon className="h-5 w-5 text-blue-500 dark:text-primary"></DotsVerticalIcon>
             </div>
             <div className="hidden items-center md:flex">{navMenu()}</div>
           </nav>

@@ -3,6 +3,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Color Palette */
+:root {
+  --primary: #ffd700;
+  --secondary: #232f3e;
+  --accent: #4b5563;
+  --success: #00c853;
+  --error: #f44336;
+}
+
 html,
 body {
   padding: 0;
@@ -11,16 +20,8 @@ body {
     Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-/* a {
-  color: inherit;
-  text-decoration: none;
-} */
-
-/* * {
-  box-sizing: border-box;
-} */
 a {
-  @apply text-blue-600 hover:text-blue-800;
+  @apply dark:text-primary dark:hover:text-yellow-600  text-blue-500 hover:text-blue-700;
 }
 input,
 select,
@@ -39,15 +40,15 @@ textarea {
   @apply flex flex-col items-center justify-center;
 }
 .primary-button {
-  @apply rounded bg-amber-300 py-2 px-4 text-black shadow outline-none hover:bg-amber-400  active:bg-amber-500;
+  @apply rounded bg-primary text-black py-2 px-4 shadow outline-none hover:bg-yellow-500  active:bg-yellow-600;
 }
 .default-button {
   @apply rounded bg-gray-100 py-2  px-4 text-black shadow outline-none hover:bg-gray-200  active:bg-gray-300;
 }
 .alert-success {
-  @apply m-3 rounded-lg bg-green-100 p-3     text-green-700;
+  @apply m-3 rounded-lg bg-success p-3 text-green-700;
 }
 
 .alert-error {
-  @apply my-3 rounded-lg bg-red-100 p-3   text-red-700;
+  @apply my-3 rounded-lg bg-error p-3 text-red-700;
 }
