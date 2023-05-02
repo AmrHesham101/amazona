@@ -284,7 +284,7 @@ export default function Layout({ children, title }) {
         </div>
         <div className="container m-auto mt-4 px-4">{children}</div>
         <div className="flex h-10 items-center justify-center shadow-inner dark:shadow-gray-700">
-          <p>Copyright © 2022 Amazona</p>
+          <p>Copyright © 2023 Amazona</p>
         </div>
       </div>
     </>
