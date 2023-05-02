@@ -43,7 +43,7 @@ textarea {
   @apply rounded bg-primary text-black py-2 px-4 shadow outline-none hover:bg-yellow-500  active:bg-yellow-600;
 }
 .default-button {
-  @apply rounded bg-gray-100 py-2  px-4 text-black shadow outline-none hover:bg-gray-200  active:bg-gray-300;
+  @apply rounded bg-gray-100 py-2  px-4 text-black dark:text-black shadow outline-none hover:bg-gray-200  active:bg-gray-300;
 }
 .alert-success {
   @apply m-3 rounded-lg bg-success p-3 text-green-700;

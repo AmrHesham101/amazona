@@ -115,7 +115,7 @@ function AdminDashboardScreen() {
                 <div className="card m-5 p-5">
                   <p className="text-3xl">${summary.ordersPrice}</p>
                   <p>Sales</p>
-                  <Link href="/admin/orders">View Sales</Link>
+                  <Link href="/admin/dashboard">View Sales</Link>
                 </div>
                 <div className="card m-5 p-5">
                   <p className="text-3xl">{summary.ordersCount}</p>
