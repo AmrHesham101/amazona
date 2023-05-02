@@ -4,7 +4,7 @@ import React from "react";
 
 export default function Rating({ rating, numReviews }) {
   return (
-    <div className="flex items-center  text-amber-300">
+    <div className="flex items-center  text-blue-500 dark:text-primary">
       {rating >= 0.5 ? (
         <StarIcon className="h-5 w-5" />
       ) : (

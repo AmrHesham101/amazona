@@ -1,18 +1,17 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
+import Image from "next/legacy/image";
+import Layout from "@/components/Layout";
+import Product from "@/models/Product";
+import db from "@/utils/db";
 import axios from "axios";
+import { Store } from "@/utils/Store";
+import { getError } from "@/utils/error";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
-
-import { useForm } from "react-hook-form";
-import { Store } from "@/utils/Store";
-import { getError } from "@/utils/error";
-import Layout from "@/components/Layout";
-import Image from "next/legacy/image";
 import Rating from "@/components/Rating";
-import Product from "@/models/Product";
-import db from "@/utils/db";
+import { useForm } from "react-hook-form";
 
 export default function ProductScreen(props) {
   const { data: session } = useSession();
@@ -23,17 +22,6 @@ export default function ProductScreen(props) {
 
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
-  const fetchReviews = useCallback(async () => {
-    try {
-      if (!product) {
-        return;
-      }
-      const { data } = await axios.get(`/api/products/${product._id}/reviews`);
-      setReviews(data);
-    } catch (err) {
-      toast.error(getError(err));
-    }
-  }, [product]);
 
   const submitHandler = async ({ rating, comment }) => {
     setLoading(true);
@@ -50,6 +38,18 @@ export default function ProductScreen(props) {
       toast.error(getError(err));
     }
   };
+
+  const fetchReviews = useCallback(async () => {
+    try {
+      if (!product) {
+        return;
+      }
+      const { data } = await axios.get(`/api/products/${product._id}/reviews`);
+      setReviews(data);
+    } catch (err) {
+      toast.error(getError(err));
+    }
+  }, [product]);
 
   useEffect(() => {
     fetchReviews();

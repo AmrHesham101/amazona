@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import React from "react";
+import Rating from "./Rating";
 
 export default function ProductItem({ product, addToCartHandler }) {
   return (
@@ -16,6 +17,7 @@ export default function ProductItem({ product, addToCartHandler }) {
         <Link href={`/product/${product.slug}`}>
           <h2 className="text-lg">{product.name}</h2>
         </Link>
+        {<Rating rating={product.rating} />}
         <p className="mb-2">{product.brand}</p>
         <p>${product.price}</p>
         <button

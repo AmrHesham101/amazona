@@ -241,7 +241,7 @@ export default function Layout({ children, title }) {
                 placeholder="Search products by name"
               />
               <button
-                className="rounded rounded-tl-none rounded-bl-none bg-amber-300 p-1 text-sm dark:text-black"
+                className="rounded rounded-tl-none rounded-bl-none bg-blue-500 dark:bg-primary p-1 text-sm dark:text-black"
                 type="submit"
                 id="button-addon2"
               >

@@ -8,7 +8,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-export default function Home({ products, error }) {
+export default function Home({ topRatedProducts, error }) {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
   const [loading, setLoading] = useState(true);
@@ -28,7 +28,7 @@ export default function Home({ products, error }) {
   };
 
   useEffect(() => {
-    if (!products && !error) {
+    if (!topRatedProducts && !error) {
       setLoading(true);
     } else {
       const timer = setTimeout(() => {
@@ -36,44 +36,42 @@ export default function Home({ products, error }) {
       }, 500); // set a delay of 1 second before changing the loading state to false
       return () => clearTimeout(timer);
     }
-  }, [products, error]);
+  }, [topRatedProducts, error]);
 
   return (
     <>
       <Layout title="Home Page">
+        <h2 className="my-3 text-2xl">Products</h2>
+        {topRatedProducts.length === 0 && !error && <div>No Product Found</div>}
+        {topRatedProducts.length === 0 && error && (
+          <p>Error loading products</p>
+        )}
+
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
           {loading &&
             loaderArray.map((_, index) => <SkeletonLoader key={index} />)}
           {!loading &&
-            products.map((product) => (
+            topRatedProducts.map((product) => (
               <ProductItem
+                key={product._id}
                 product={product}
-                key={product.slug}
                 addToCartHandler={addCartHandler}
               />
             ))}
         </div>
-        {error && <p>Error loading products</p>}
       </Layout>
     </>
   );
 }
-
 export async function getServerSideProps() {
-  try {
-    await db.connect();
-    const products = await Product.find({}, '-reviews').lean();
-    await db.disconnect();
-    return {
-      props: {
-        products: products.map(db.convertDocToObj),
-      },
-    };
-  } catch (err) {
-    return {
-      props: {
-        error: true,
-      },
-    };
-  }
+  await db.connect();
+  const topRatedProductsDocs = await Product.find({}, "-reviews").lean().sort({
+    rating: -1,
+  });
+  await db.disconnect();
+  return {
+    props: {
+      topRatedProducts: topRatedProductsDocs.map(db.convertDocToObj),
+    },
+  };
 }
